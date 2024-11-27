@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 // Definimos la colleccion
-const libroCollection = 'Libros';
+const libroCollection = 'libros';
 
 const libroSchema = new Schema({
     name: String,
-    autor: { type: Schema.Types.ObjectId, ref: 'autor' },
+    autor: { type: Schema.Types.ObjectId, ref: 'autors' }, 
     etapa: { type: Schema.Types.ObjectId, ref: 'etapa' },
+    descripcion: String,
     complejidad: String,
     created: {
         type: Date,

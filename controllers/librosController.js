@@ -1,27 +1,18 @@
-import libroModel from "../models/librosModel.js";
+import librosModel from "../models/librosModel.js";
 import autorModel from "../models/autorModel.js";
 import etapaModel from "../models/etapaModel.js";
 
 const createLibro = async (req, res) => {
   try {
-    const { name, autor, etapa, complejidad } = req.body;
-
+    const { name, autor, etapa, descripcion, complejidad } = req.body;
     let autorExistente = await autorModel.findOne({ name: autor });
-    if (!autorExistente) {
-      autorExistente = new autorModel({ name: autor });
-      await autorExistente.save();
-    }
+    let etapaExistente = await etapaModel.findOne({ name: etapa });    
 
-    let etapaExistente = await etapaModel.findOne({ name: etapa });
-    if (!etapaExistente) {
-      etapaExistente = new etapaModel({ name: etapa });
-      await etapaExistente.save();
-    }
-
-    const libro = new libroModel({
+    const libro = new librosModel({
       name,
-      autor: autor,
-      etapa: etapa,
+      autor: autorExistente._id.toString(),
+      etapa: etapaExistente._id.toString(),
+      descripcion,
       complejidad,
     });
 
@@ -37,7 +28,7 @@ const createLibro = async (req, res) => {
 const getLibrosById = async (req, res) => {
   const { id } = req.params;
   try {
-    const libros = await libroModel
+    const libros = await librosModel
       .findById(id)
       .populate("autor", "name")
       .populate("etapa", "name");
@@ -50,14 +41,16 @@ const getLibrosById = async (req, res) => {
 
 const getLibros = async (req, res) => {
   try {
-    const libros = await libroModel
+    const libros = await librosModel
       .find()
       .populate("autor", "name")
       .populate("etapa", "name");
 
     res.status(200).json({ msg: "success", data: libros });
   } catch (error) {
-    res.status(500).json({ msg: "error", data: [] });
+    console.log(error)
+    
+    res.status(500).json({ msg: "error", error });
     console.error(error);
   }
 };
@@ -66,7 +59,7 @@ const updateLibros = async (req, res) => {
   const { id } = req.params;
   const { complejidad } = req.body;
   try {
-    const libro = await libroModel.findByIdAndUpdate(
+    const libro = await librosModel.findByIdAndUpdate(
       id,
       { complejidad },
       { new: true }
@@ -81,7 +74,7 @@ const updateLibros = async (req, res) => {
 const deleteLibrosById = async (req, res) => {
   const { id } = req.params;
   try {
-    const libros = await libroModel.findByIdAndDelete(id);
+    const libros = await librosModel.findByIdAndDelete(id);
     res.status(200).json({ msg: "success", data: libros });
   } catch (error) {
     res.status(500).json({ msg: "error", data: [] });

@@ -1,7 +1,7 @@
 import Joi from "joi";
-import validator from "validator";
 import etapaModel from "../models/etapaModel.js";
 import autorModel from "../models/autorModel.js";
+import userModel from "../models/userModel.js";
 import librosModel from "../models/librosModel.js";
 
 export const courseValidation = (data) => {
@@ -13,7 +13,7 @@ export const courseValidation = (data) => {
   return schema.validate(data);
 };
 
-//validaciones para los usuarios
+// Validaciones para los usuarios
 export const validateUserFields = (req, res, next) => {
   const { name, email, username, password } = req.body;
 
@@ -23,20 +23,20 @@ export const validateUserFields = (req, res, next) => {
         "Nombre, correo electrónico, nombre de usuario y contraseña son campos obligatorios.",
     });
   }
-
-  if (!validator.isEmail(email)) {
+  // Validación manual del correo electrónico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
     return res
       .status(400)
       .json({ message: "El correo electrónico no tiene un formato válido." });
   }
-
   next();
 };
-export const checkEmailExistente = (req, res, next) => {
-  const { email } = req.body;
-  const users = readUsersFile();
 
-  const userExistente = users.some((user) => user.email === email);
+export const checkEmailExistente = async (req, res, next) => {
+  const { email } = req.body;
+  let userExistente = await userModel.findOne({ email: email });
+
   if (userExistente) {
     return res
       .status(400)
@@ -45,6 +45,7 @@ export const checkEmailExistente = (req, res, next) => {
 
   next();
 };
+
 export const passwordValida = (req, res, next) => {
   const { password } = req.body;
 
@@ -80,8 +81,6 @@ export const passwordValida = (req, res, next) => {
   next();
 };
 
-//validaciones para la base de datos
-
 // Validaciones para el autor
 export const validateAutorName = async (name) => {
   if (!name) {
@@ -95,23 +94,19 @@ export const validateAutorName = async (name) => {
     return "El nombre no puede contener caracteres especiales.";
   }
 
-  if (name.length < 6) {
-    return "El nombre debe tener al menos 6 caracteres.";
+  const nombreAutorExistente = await autorModel.findOne({ name: name });
+  if (nombreAutorExistente) {
+    return "Este autor ya se encuentra en nuestra base de datos!";
   }
-  if (name.length > 40) {
-    return "El nombre no debe exceder los 40 caracteres.";
-  }
-
-  const autorExistente = await autorModel.findOne({ name: name });
-  if (autorExistente) {
-    return "El nombre del autor ya está en uso.";
+  const idAutorExistente = await autorModel.findOne({ name: name });
+  if (idAutorExistente) {
+    return "Este autor ya se encuentra en nuestra base de datos!";
   }
 };
 
-//Validaciones de Etapa
+// Validaciones de Etapa
 export const etapaValida = async (req, res, next) => {
   const { name } = req.body;
-
   if (!name) {
     return res
       .status(400)
@@ -125,12 +120,10 @@ export const etapaValida = async (req, res, next) => {
 
   // Validar que el nombre tenga al menos 3 caracteres
   if (name.length < 6) {
-    return res
-      .status(400)
-      .json({
-        msg: "error",
-        error: "La etapa debe tener un mínimo de 6 caractéres",
-      });
+    return res.status(400).json({
+      msg: "error",
+      error: "La etapa debe tener un mínimo de 6 caractéres",
+    });
   }
 
   if (name.length > 30) {
@@ -154,68 +147,67 @@ export const etapaValida = async (req, res, next) => {
   next();
 };
 
-
-//validaciones para libro
-// Función que valida y crea un autor si no existe
+// Validaciones para libro
 export const validateAutor = async (autor) => {
-    let autorExistente = await autorModel.findOne({ name: autor });
-    if (!autorExistente) {
-        autorExistente = new autorModel({ name: autor });
-        await autorExistente.save(); // Guardar el autor si no existe
-    }
-    return autorExistente;
+  let autorExistente = await autorModel.findOne({ name: autor });
+  if (!autorExistente) {
+    autorExistente = new autorModel({ name: autor });
+    await autorExistente.save(); // Guardar el autor si no existe
+  }
+  return autorExistente;
 };
 
 export const validateEtapa = async (etapa) => {
-    let etapaExistente = await etapaModel.findOne({ name: etapa });
-    if (!etapaExistente) {
-        etapaExistente = new etapaModel({ name: etapa });
-        await etapaExistente.save(); // Guardar el etapa si no existe
-    }
-    return autorExistente;
+  let etapaExistentePorName = await etapaModel.findOne({ name: etapa });
+  console.log(etapaExistentePorName)
+  if (!etapaExistentePorName) {
+    etapaExistentePorName = new etapaModel({ name: etapa });
+    await etapaExistentePorName.save(); 
+    return etapaExistentePorName;
+  }
+
 };
 
 // Función para validar el libro
 export const validarLibro = async (req, res, next) => {
-    const { name, autor, etapa, complejidad } = req.body;
+  const { name, autor, etapa, descripcion, complejidad } = req.body;
+  // Validaciones del nombre del libro
+  if (!name) {
+    return res.status(400).json({ msg: "error", error: "Name is required" });
+  }
 
-    // Validaciones del nombre del libro
-    if (!name) {
-        return res.status(400).json({ msg: "error", error: "Name is required" });
+  if (typeof name !== 'string') {
+    return res.status(400).json({ msg: "error", error: "Name must be a string" });
+  }
+
+  if (name.length < 3) {
+    return res.status(400).json({ msg: "error", error: "Name must be at least 3 characters long" });
+  }
+
+  if(descripcion.length < 20){
+    return res.status(400).json({ msg: "error", error: "Es una descripción demasiado corta!" });
+  }
+
+  try {
+    const libroExistente = await librosModel.findOne({ name });
+    if (libroExistente) {
+      return res.status(400).json({ msg: "error", error: "Este libro ya existe!!" });
     }
+  } catch (error) {
+    return res.status(500).json({ msg: "error", error: "Database error" });
+  }
 
-    if (typeof name !== 'string') {
-        return res.status(400).json({ msg: "error", error: "Name must be a string" });
-    }
+  try {
+    await validateAutor(autor); 
+  } catch (error) {
+    return res.status(500).json({ msg: "error", error: "Error en validar el autor" });
+  }
+  try {
+    await validateEtapa(etapa); 
+  } catch (error) {
+    return res.status(500).json({ msg: "error", error: "Error en validar el etapa" });
+  }
 
-    if (name.length < 3) {
-        return res.status(400).json({ msg: "error", error: "Name must be at least 3 characters long" });
-    }
-
-    if (name.length > 50) {
-        return res.status(400).json({ msg: "error", error: "Name must be less than 50 characters long" });
-    }
-
-    try {
-        const libroExistente = await librosModel.findOne({ name });
-        if (libroExistente) {
-            return res.status(400).json({ msg: "error", error: "Este libro ya existe!!" });
-        }
-    } catch (error) {
-        return res.status(500).json({ msg: "error", error: "Database error" });
-    }
-
-    try {
-        await validateAutor(autor); 
-    } catch (error) {
-        return res.status(500).json({ msg: "error", error: "Error en validar el autor" });
-    }
-
-    let etapaExistente = await etapaModel.findOne({ name: etapa });
-    if (!etapaExistente) {
-        etapaExistente = new etapaModel({ name: etapa });
-        await etapaExistente.save();
-    }
-
-    next(); 
+  next(); 
+  
 };

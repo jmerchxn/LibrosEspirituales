@@ -5,10 +5,11 @@ const Schema = mongoose.Schema;
 const autorCollection = 'autors';
 
 const autorSchema = new Schema({
+    
     name: {
         type: String,
         required: true,
-        trim: true  // Elimina espacios innecesarios al principio y al final
+        trim: true  
     },
     created: {
         type: Date,

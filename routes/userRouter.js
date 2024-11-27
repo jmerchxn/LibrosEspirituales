@@ -1,8 +1,7 @@
 import express, { Router } from "express";
-import { getAllUsers, getUserById, createUser, updateUser, deleteUser, loginUser } from "../controllers/userController.js";
+import { getUsers, getUserById, createUser, updateUser, deleteUserById, loginUser } from "../controllers/userController.js";
 import jwt from "jsonwebtoken";
 import { validateUserFields, checkEmailExistente, passwordValida } from "../validations/validations.js";
-
 const router = express.Router();
 
 const auth = (req, res, next) => {
@@ -26,11 +25,11 @@ const auth = (req, res, next) => {
     }
 }
 
-router.get('/', getAllUsers);
+router.get('/', getUsers);
 router.get('/:id', getUserById);
-router.post('/', validateUserFields, checkEmailExistente, passwordValida, createUser); 
+router.post('/create', validateUserFields, checkEmailExistente, passwordValida, createUser); 
 router.post('/login', loginUser);
 router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.delete('/:id', deleteUserById);
 
 export default router;

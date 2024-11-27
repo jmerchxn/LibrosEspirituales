@@ -5,7 +5,7 @@ import { validateAutorName } from '../validations/validations.js';
 const router = Router();
 
 router.delete('/:id', deleteAutorById);
-router.post('/autores', validateAutorName, createAutor);
+router.post('/create', createAutor);
 router.get('/name/:name', getAutorByName);
 router.get('/:id', getAutorById);
 router.get('/', getAutores);

@@ -4,21 +4,14 @@ import { validateAutorName } from "../validations/validations.js";
 
 const createAutor = async (req, res) => {
     const { name } = req.body;
-
-    // Llamamos a la función de validación
-    const validationError = await validateAutorName(name);  // Usamos await ya que la función es asincrónica
-
-    // Si hay algún error en la validación, respondemos con el error
+    
+    const validationError = await validateAutorName(name); 
     if (validationError) {
         return res.status(400).json({ msg: validationError });
     }
-
     try {
-
         const autor = new autorModel({ name });
-
         const result = await autor.save(); 
-
         res.status(200).json({ msg: "success", data: result });
     } catch (error) {
         if (error.code === 11000) {
