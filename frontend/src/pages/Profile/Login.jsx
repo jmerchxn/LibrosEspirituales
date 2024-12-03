@@ -23,7 +23,8 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
-      setError(error.response?.data?.message || "Error al iniciar sesión");
+      setError(error.response?.data?.msj || "Error al iniciar sesión");
+
     }
   };
 

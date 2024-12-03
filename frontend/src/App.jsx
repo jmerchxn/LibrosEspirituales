@@ -21,9 +21,9 @@ import { AnimatePresence } from "framer-motion";
 function App() {
   return (
     <>
-      <Navbar />
       <AnimatePresence mode='wait'>
         <AuthContextProvider>
+      <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/books" element={<Books />} />

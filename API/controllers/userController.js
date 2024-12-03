@@ -2,6 +2,7 @@ import userModel from "../models/userModel.js";
 import librosModel from "../models/librosModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import 'dotenv/config'; 
 
 const createUser = async (req, res) => {
   try {
@@ -95,8 +96,7 @@ const loginUser = async (req, res) => {
         .status(400)
         .json({ error: "ok", msj: "Email and password are required" });
     }
-    const user = await Users.findOne({ email: req.body.email });
-
+    const user = await userModel.findOne({ email: req.body.email });
     if (!user) {
       return res
         .status(400)
@@ -108,7 +108,6 @@ const loginUser = async (req, res) => {
         .status(400)
         .json({ error: "ok", msj: "Wrong user or password" });
     }
-
     // Crear el token JWT
     const jwToken = jwt.sign(
       {
@@ -122,6 +121,8 @@ const loginUser = async (req, res) => {
       process.env.SEED,
       { expiresIn: process.env.EXPIRATION }
     );
+    console.log("Login success", jwToken);
+
     res.json({
       usuario: {
         _id: user._id,
@@ -132,7 +133,8 @@ const loginUser = async (req, res) => {
       jwToken,
     });
   } catch (err) {
-    res.status(500).json({ error: "ok", msj: "Server error: " + err.message });
+    console.error("Error during login:", err); // Log de error
+        res.status(500).json({ error: 'ok', msj: 'Server error: ' + err.message });
   }
 };
 
