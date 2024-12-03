@@ -4,7 +4,8 @@ import etapaModel from "../models/etapaModel.js";
 
 const createLibro = async (req, res) => {
   try {
-    const { name, autor, etapa, descripcion, complejidad } = req.body;
+    const { name, autor, etapa, descripcion, complejidad, imagen, comentario } = req.body;
+    
     let autorExistente = await autorModel.findOne({ name: autor });
     let etapaExistente = await etapaModel.findOne({ name: etapa });    
 
@@ -14,13 +15,15 @@ const createLibro = async (req, res) => {
       etapa: etapaExistente._id.toString(),
       descripcion,
       complejidad,
+      imagen,
+      comentario
     });
 
     const libroGuardado = await libro.save();
 
     res.status(200).json({ msg: "success", data: libroGuardado });
   } catch (error) {
-    res.status(500).json({ msg: "error", data: [] });
+    res.status(500).json({ msg: "error al crear el libros desde el controller", data: [] });
     console.error(error);
   }
 };
@@ -34,7 +37,7 @@ const getLibrosById = async (req, res) => {
       .populate("etapa", "name");
     res.status(200).json({ msg: "success", data: libros });
   } catch (error) {
-    res.status(500).json({ msg: "error", data: [] });
+    res.status(500).json({ msg: "error al obtener libros desde el controller", data: [] });
     console.error(error);
   }
 };

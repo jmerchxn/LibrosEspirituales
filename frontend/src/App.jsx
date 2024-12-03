@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { AuthContextProvider } from "./context/AuthContext";
+import "./App.css";
+import {
+  Home,
+  Books,
+  AddBooks,
+  Trivia,
+  Community,
+  Profile,
+  Favs,
+  MyPosts,
+  ConfigProfile,
+  Login,
+  Register
+} from "./pages";
+import { Navbar, Error } from "./components";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <AnimatePresence mode='wait'>
+        <AuthContextProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/addbooks" element={<AddBooks />} />
+          <Route path="/trivia" element={<Trivia />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/user/:id" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/favs" element={<Favs />} />
+          <Route path="/myposts" element={<MyPosts />} />
+          <Route path="/configProfile" element={<ConfigProfile />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+        </AuthContextProvider>
+      </AnimatePresence>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

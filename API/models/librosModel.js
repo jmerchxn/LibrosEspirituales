@@ -10,6 +10,8 @@ const libroSchema = new Schema({
     etapa: { type: Schema.Types.ObjectId, ref: 'etapa' },
     descripcion: String,
     complejidad: String,
+    imagen: { type: String, required: true },
+    comentario: String,
     created: {
         type: Date,
         default: Date.now

@@ -3,7 +3,7 @@ import etapaModel from "../models/etapaModel.js";
 import autorModel from "../models/autorModel.js";
 import userModel from "../models/userModel.js";
 import librosModel from "../models/librosModel.js";
-
+import multer from 'multer';
 export const courseValidation = (data) => {
   const schema = Joi.object({
     title: Joi.string().min(3).required(),
@@ -148,6 +148,8 @@ export const etapaValida = async (req, res, next) => {
 };
 
 // Validaciones para libro
+
+
 export const validateAutor = async (autor) => {
   let autorExistente = await autorModel.findOne({ name: autor });
   if (!autorExistente) {
@@ -159,55 +161,83 @@ export const validateAutor = async (autor) => {
 
 export const validateEtapa = async (etapa) => {
   let etapaExistentePorName = await etapaModel.findOne({ name: etapa });
-  console.log(etapaExistentePorName)
+  console.log(etapaExistentePorName);
   if (!etapaExistentePorName) {
     etapaExistentePorName = new etapaModel({ name: etapa });
-    await etapaExistentePorName.save(); 
+    await etapaExistentePorName.save();
     return etapaExistentePorName;
   }
-
 };
 
-// Función para validar el libro
+
 export const validarLibro = async (req, res, next) => {
-  const { name, autor, etapa, descripcion, complejidad } = req.body;
+  const { name, autor, etapa, descripcion, complejidad, imagen, comentario } =
+    req.body;
   // Validaciones del nombre del libro
+
   if (!name) {
     return res.status(400).json({ msg: "error", error: "Name is required" });
   }
 
-  if (typeof name !== 'string') {
-    return res.status(400).json({ msg: "error", error: "Name must be a string" });
+
+  if (typeof name !== "string") {
+    return res
+      .status(400)
+      .json({ msg: "error", error: "Name must be a string" });
   }
+
 
   if (name.length < 3) {
-    return res.status(400).json({ msg: "error", error: "Name must be at least 3 characters long" });
+    return res.status(400).json({
+      msg: "error",
+      error: "Name must be at least 3 characters long",
+    });
   }
 
-  if(descripcion.length < 20){
-    return res.status(400).json({ msg: "error", error: "Es una descripción demasiado corta!" });
+
+  if (descripcion.length < 20) {
+    return res
+      .status(400)
+      .json({ msg: "error", error: "Es una descripción demasiado corta!" });
   }
+
 
   try {
     const libroExistente = await librosModel.findOne({ name });
+    console.log('paso5')
+
     if (libroExistente) {
-      return res.status(400).json({ msg: "error", error: "Este libro ya existe!!" });
-    }
+      return res
+        .status(400)
+        .json({ msg: "error", error: "Este libro ya existe!!" });
+    }    
+
   } catch (error) {
     return res.status(500).json({ msg: "error", error: "Database error" });
-  }
+  }    
+
+
 
   try {
-    await validateAutor(autor); 
-  } catch (error) {
-    return res.status(500).json({ msg: "error", error: "Error en validar el autor" });
-  }
-  try {
-    await validateEtapa(etapa); 
-  } catch (error) {
-    return res.status(500).json({ msg: "error", error: "Error en validar el etapa" });
-  }
+    await validateAutor(autor);
 
-  next(); 
-  
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ msg: "error", error: "Error en validar el autor" });
+  }    
+
+  try {
+    await validateEtapa(etapa);
+
+
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ msg: "error", error: "Error en validar el etapa" });
+  }
+  console.log('paso6')
+
+
+  next();
 };
