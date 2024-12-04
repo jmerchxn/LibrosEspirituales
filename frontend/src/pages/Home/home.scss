@@ -1,0 +1,57 @@
+.encabezadoTrivia {
+  text-align: center;
+  padding: 270px;
+  background-image: url("/public/encabezado-trivia.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+
+  button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #f171f6 !important;
+    color: white;
+
+    &:hover {
+      background-color: #d368d6 !important;
+    }
+  }
+}
+.ultAgregados {
+  h2 {
+    margin-top: 3rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    color: #333;
+  }
+
+  .ultAgregadosContainer {
+    .row {
+        padding: 1.5rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background-color: #ec62f1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #bf50c6;
+      }
+    }
+  }
+}

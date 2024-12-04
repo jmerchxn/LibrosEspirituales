@@ -1,0 +1,100 @@
+/* Contenedor específico para los libros */
+.book-list {
+    padding: 2rem;
+    
+    /* Estilo para el botón de agregar libro */
+    .btn-success {
+      background-color:#ec62f1;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1.5rem;
+      margin-top: 3rem ;
+      border: none;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #218838;
+        color: white;
+      }
+    }
+  
+    /* Estilo para el texto de carga */
+    .loading-message {
+      font-size: 1rem;
+      color: #666;
+    }
+  
+    /* Estilos cuando se muestran los libros */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+  
+      .col-md-6 {
+        flex: 1 0 calc(50% - 1rem);
+        max-width: calc(50% - 1rem);
+        display: flex;
+        justify-content: center;
+  
+        @media (max-width: 768px) {
+          flex: 1 0 100%;
+          max-width: 100%;
+        }
+      }
+    }
+    
+    /* Estilos para la tarjeta de libro */
+    .card {
+      max-width: 100%;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      
+      .card-body {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        
+        .card-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          color: #ec62f1;
+        }
+  
+        .card-text {
+          font-size: 1rem;
+          color: #666;
+          margin-bottom: 1rem;
+  
+          small {
+            font-size: 0.8rem;
+            color: #999;
+          }
+        }
+  
+        button {
+          background-color: white;
+          border: none;
+          cursor: pointer;
+          margin-top: 1rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.2s, background-color 0.3s;
+  
+          &:hover {
+            transform: scale(1.1);
+            background-color: #f1f3f5;
+          }
+  
+          .fa-heart {
+            color: #74c0fc;
+            font-size: 2rem;
+          }
+        }
+      }
+    }
+  }
+  

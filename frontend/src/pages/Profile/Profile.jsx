@@ -1,11 +1,14 @@
 import React from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
+import { useContext } from "react"; 
+import { AuthContext } from "../../context/AuthContext"; 
 
 const Profile = () => {
-  const { id } = useParams();
+  const { user } = useContext(AuthContext);
+
   return (
     <div>
-      Profile ID: {id}
+      <h2>Bienvenido/a {user?.username}</h2>
       <nav>
         <ul>
           <li><Link to="/favs">Favoritos</Link></li>

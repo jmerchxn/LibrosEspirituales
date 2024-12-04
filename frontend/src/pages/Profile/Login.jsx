@@ -34,7 +34,7 @@ const Login = () => {
     navigate("/register");
   };
   return (
-    <div>
+    <div className="login-container">
       <h1>Login</h1>
       <form>
         <div className="mb-3">

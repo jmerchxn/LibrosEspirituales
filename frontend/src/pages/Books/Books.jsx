@@ -30,7 +30,7 @@ const Books = () => {
   console.log('BOOKS SALGO DOS VECES')
 
   return (
-    <div>
+    <div className="book-list">
       <button onClick={toAddBooks} className="btn btn-success mb-3">
         Agrega un libro!
       </button>

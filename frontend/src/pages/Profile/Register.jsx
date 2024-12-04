@@ -25,7 +25,7 @@ function Register() {
     }
 };
   return (
-    <div className="container">
+    <div className="register-container">
       <h2 className="text-center">
         Registrate aquí para participar en nuetra comunidad!
       </h2>

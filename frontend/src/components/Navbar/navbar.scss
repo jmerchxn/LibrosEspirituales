@@ -1,56 +1,53 @@
 .navbar {
-  
-    .container-fluid {
+  .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ec62f1; // Puedes cambiar el color del texto
+    text-decoration: none;
+    margin-left: 3rem;
+    padding: 1rem;
+  }
+
+  /* Mostrar el menú solo en pantallas pequeñas */
+  @media (max-width: 768px) {
+    .navbar-collapse {
+      display: block; // Menú visible en dispositivos móviles
+    }
+
+    .navbar-nav {
+      list-style: none;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column; // Poner los elementos en columna
+      gap: 0.5rem;
+      text-align: center;
     }
-  
-    .navbar-brand {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #ec62f1; // Puedes cambiar el color del texto
-      text-decoration: none;
-      margin-left:3rem;
-      padding: 1rem;
-    }
-  
-  
-    /* Mostrar el menú solo en pantallas pequeñas */
-    @media (max-width: 768px) {
-      .navbar-collapse {
-        display: block; // Menú visible en dispositivos móviles
-      }
-  
-      .navbar-nav {
-        list-style: none;
-        display: flex;
-        flex-direction: column; // Poner los elementos en columna
-        gap: 0.5rem;
-        text-align: center;
-      }
-  
-      .nav-item {
-        .nav-link {
-          color: #333;
-          text-decoration: none;
-          font-size: 1rem;
-          padding: 0.5rem 1rem;
-          transition: all 0.3s;
-  
-          &:hover {
-            background-color: #007bff;
-            color: white;
-          }
+
+    .nav-item {
+      .nav-link {
+        color: #333;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s;
+
+        &:hover {
+          background-color: #007bff;
+          color: white;
         }
       }
     }
   }
-  
-  /* Estilos para ocultar el menú en pantallas grandes */
-  @media (min-width: 769px) {
-    .navbar-collapse {
-      display: none; // Menú oculto en pantallas grandes
-    }
+}
+
+/* Estilos para ocultar el menú en pantallas grandes */
+@media (min-width: 769px) {
+  .navbar-collapse {
+    display: none; // Menú oculto en pantallas grandes
   }
-  
+}

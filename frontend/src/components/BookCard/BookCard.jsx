@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons"; // Ícono de corazón lleno
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons"; // Ícono de corazón vacío
-import { useContext } from "react"; // Asegúrate de importar useContext
-import { AuthContext } from "../../context/AuthContext"; // Importa tu contexto
+import { useContext } from "react"; 
+import { AuthContext } from "../../context/AuthContext"; 
 import axios from "axios";
 
 const BookCard = ({
@@ -66,9 +66,9 @@ const BookCard = ({
 
   return (
     <div className="card mb-3" style={{ maxWidth: "540px" }}>
-      <div className="row g-0">
-        <div className="col-md-4">
-          <img src={imagen} className="img-fluid rounded-start" alt={name} />
+      <div className="card-container">
+        <div className="img">
+          <img src={imagen} style={{width: "250px", height:"350px"}} className="img-fluid rounded-start" alt={name} />
         </div>
         <div className="col-md-8">
           <div className="card-body">

@@ -1,6 +1,11 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 @import '../../frontend/src/components/Navbar/navbar.scss';
+@import '../../frontend/src/components/BookCard/bookcard.scss';
+@import '../../frontend/src/pages/Books/books.scss';
+@import '../../frontend/src/pages/Home/home.scss';
+@import '../../frontend/src/pages/Profile/login.scss';
+@import '../../frontend/src/pages/Profile/register.scss';
 
 *{
   box-sizing: border-box;
