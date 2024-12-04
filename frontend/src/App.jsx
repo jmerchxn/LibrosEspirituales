@@ -11,7 +11,7 @@ import {
   Profile,
   Favs,
   MyPosts,
-  ConfigProfile,
+
   Login,
   Register
 } from "./pages";
@@ -35,7 +35,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/favs" element={<Favs />} />
           <Route path="/myposts" element={<MyPosts />} />
-          <Route path="/configProfile" element={<ConfigProfile />} />
           <Route path="*" element={<Error />} />
         </Routes>
         </AuthContextProvider>

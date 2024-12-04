@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { BookCard } from "../../components/BookCard";
+import { BookCard } from "../../components/BookCard/BookCard.jsx";
 import { useContext } from "react"; // Asegúrate de importar useContext
 import { AuthContext } from "../../context/AuthContext"; // Importa tu contexto
 

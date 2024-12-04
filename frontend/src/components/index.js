@@ -1,3 +1,3 @@
-export { Navbar } from "./Navbar.jsx";
-export { BookCard } from "./BookCard.jsx";
+export { Navbar } from "./Navbar/Navbar.jsx";
+export { BookCard } from "./BookCard/BookCard.jsx";
 export { Error } from "./Error.jsx";

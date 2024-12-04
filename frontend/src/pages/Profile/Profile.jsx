@@ -10,7 +10,7 @@ const Profile = () => {
         <ul>
           <li><Link to="/favs">Favoritos</Link></li>
           <li><Link to="/myposts">Mis posts</Link></li>
-          <li><Link to="/configProfile">Configuración del Perfil</Link></li>
+          
         </ul>
       </nav>
       <Outlet />

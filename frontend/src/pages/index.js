@@ -7,5 +7,5 @@ export {Login} from "./Profile/Login"
 export {Register} from "./Profile/Register"
 export {Favs} from "./Favs/Favs"
 export {MyPosts} from "./Profile/MyPosts"
-export {ConfigProfile} from "./Profile/ConfigProfile"
+
 export {Trivia} from "./Trivia/Trivia"

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons"; // Ícono de corazón lleno
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons"; // Ícono de corazón vacío
 import { useContext } from "react"; // Asegúrate de importar useContext
-import { AuthContext } from "../context/AuthContext"; // Importa tu contexto
+import { AuthContext } from "../../context/AuthContext"; // Importa tu contexto
 import axios from "axios";
 
 const BookCard = ({
