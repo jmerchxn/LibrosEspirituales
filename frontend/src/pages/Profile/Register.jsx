@@ -15,19 +15,15 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    await axios
-      .post("http://localhost:3000/users/create", userData)
-      .then((res) => {
-        console.log(res);
+    try {
+        const res = await axios.post("http://localhost:3000/users/create", userData);
+        console.log("Usuario registrado:", res.data); // Accedes a la respuesta correctamente.
         navigate('/login');
-      })
-      .catch((error)=>{
-        console.log(error)
-        setError(error.response.data.message)
-      })
-    console.log("Usuario registrado:", response.data);
-  };
-
+    } catch (error) {
+        console.error(error);
+        setError(error.response?.data?.message || "Error al registrar el usuario");
+    }
+};
   return (
     <div className="container">
       <h2 className="text-center">

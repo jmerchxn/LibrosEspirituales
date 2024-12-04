@@ -6,12 +6,9 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const auth = Cookies.get("jwToken");
-  console.log(auth);
-  console.log("Token recibido:", auth);  
   useEffect(()=>{
     if(auth){
         const decoded = jwtDecode(auth);
-        console.log(decoded)
         setUser({
             username: decoded.usuario.username,
             id: decoded.usuario._id

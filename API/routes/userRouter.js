@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { getUsers, getUserById, createUser, updateUser, deleteUserById, loginUser,  toggleFavorite, getUserFavoritos, } from "../controllers/userController.js";
+import { getUsers, getUserById, createUser, updateUser, isAfavoriteBookInUser, deleteUserById, loginUser,  toggleFavorite, getUserFavoritos, } from "../controllers/userController.js";
 import jwt from "jsonwebtoken";
 import { validateUserFields, checkEmailExistente, passwordValida } from "../validations/validations.js";
 const router = express.Router();
@@ -24,7 +24,7 @@ const auth = (req, res, next) => {
         res.status(401)
     }
 }
-
+router.get('/:id/favorito/:libroId', isAfavoriteBookInUser); // Obtener favoritos del usuario
 router.get('/', getUsers);
 router.get('/:id', getUserById);
 router.post('/create', validateUserFields, checkEmailExistente, passwordValida, createUser); 
@@ -34,6 +34,6 @@ router.get('/:id', getUserById);
 router.delete('/:id', deleteUserById);
 router.get('/:id/favoritos', getUserFavoritos); // Obtener favoritos del usuario
 router.post('/:id/favoritos', toggleFavorite); // Agregar un libro a los favoritos
-router.delete('/:id/favoritos/:bookId', toggleFavorite); // Eliminar un libro de los favoritos
+
 
 export default router;

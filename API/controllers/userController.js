@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js";
 import librosModel from "../models/librosModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import 'dotenv/config'; 
+import "dotenv/config";
 
 const createUser = async (req, res) => {
   try {
@@ -134,26 +134,53 @@ const loginUser = async (req, res) => {
     });
   } catch (err) {
     console.error("Error during login:", err); // Log de error
-        res.status(500).json({ error: 'ok', msj: 'Server error: ' + err.message });
+    res.status(500).json({ error: "ok", msj: "Server error: " + err.message });
   }
 };
 
 const toggleFavorite = async (req, res) => {
-  const { id, libroId } = req.body;
+  const { id } = req.params;
+  const { libroId } = req.body;
+
+  console.log(req.params, req.body, 'ACA TENES LO Q MANDAS GILIPOLLAS');
+
+  if (!id || !libroId) {
+    return res
+      .status(400)
+      .json({ msg: "ID de usuario y libro son requeridos" });
+  }
   try {
     const user = await userModel.findById(id);
     if (!user) {
       return res.status(404).json({ msg: "Usuario no encontrado" });
     }
 
-    // Si el libro ya está en favoritos, lo eliminamos, si no, lo agregamos
-    if (user.favoritos.includes(libroId)) {
-      user.favoritos = user.favoritos.filter((id) => id !== libroId);
-    } else {
-      user.favoritos.push(libroId);
-    }
+    // Asegúrate de que user.favoritos sea un array, incluso si no existe
+    const favoritosActuales = Array.isArray(user.favoritos)
+      ? user.favoritos
+      : [];
 
-    await user.save();
+    console.log(user.favoritos)
+
+    // Lógica para añadir o eliminar el libro
+    let favs;
+    if (favoritosActuales.some((libroEnFavs) => libroEnFavs.toString() === libroId)) {
+      // Si el libro ya está en favoritos, elimínalo
+      favs = favoritosActuales.filter((libroEnFavs) => libroEnFavs.toString() !== libroId);
+
+      console.log(favs);
+
+    } else {
+      // Si no está en favoritos, añádelo
+      favs = [...favoritosActuales, libroId];
+    }
+    // Actualiza los favoritos en la base de datos
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { favoritos: favs }, // Campo a actualizar
+      { new: true } // Opciones: devuelve el documento actualizado
+    );
+
     res
       .status(200)
       .json({ msg: "Favoritos actualizados", favoritos: user.favoritos });
@@ -162,6 +189,7 @@ const toggleFavorite = async (req, res) => {
     res.status(500).json({ msg: "Error al actualizar favoritos", error });
   }
 };
+
 const getUserFavoritos = async (req, res) => {
   const { id } = req.params; // Usamos el id como parámetro en la URL
   try {
@@ -177,10 +205,35 @@ const getUserFavoritos = async (req, res) => {
   }
 };
 
+
+const isAfavoriteBookInUser = async (req, res) => {
+  const { id, libroId} = req.params; 
+
+  try {
+    const user = await userModel.findById(id).populate("favoritos");
+
+    if (!user) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
+
+
+    const isAFavoriteBook = user.favoritos.some((libroEnFavs) => {
+      return libroEnFavs._id.toString() === libroId});
+    
+
+    res.status(200).json({ msg: "Es un favorito obtenido", data: isAFavoriteBook});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error al obtener favoritos", error });
+  }
+};
+
+
 export {
   createUser,
   getUserById,
   getUsers,
+  isAfavoriteBookInUser,
   updateUser,
   deleteUserById,
   loginUser,

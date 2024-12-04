@@ -1,27 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BookCard } from "../../components/BookCard.jsx";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
-const Favs = ({id}) => {
+const Favs = ({}) => {
   const [librosFavoritos, setLibrosFavoritos] = useState([]);
   const [loading, setLoading] = useState(true);
+  // sacar el userId del context
+  const { user } = useContext(AuthContext)
 
+  console.log(useContext(AuthContext));
+  
   useEffect(() => {
+    const userId = user?.id;
+
+    console.log(userId, 'este es el usuario')
+
     const fetchFavoritos = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/user/${id}/favoritos`);
-        setLibrosFavoritos(response.data); 
+        const response = await axios.get(`http://localhost:3000/users/${userId}/favoritos`);
+        setLibrosFavoritos(response.data.data); 
         setLoading(false);
       } catch (error) {
         console.error("Error al cargar los favoritos:", error);
         setLoading(false);
       }
     };
-
-    if (id) {
+    if (userId) {
       fetchFavoritos(); 
     }
-  }, [id]); 
+  }, [user, librosFavoritos]); 
 
   return (
     <div>
@@ -33,6 +42,7 @@ const Favs = ({id}) => {
           {librosFavoritos.map((libro) => (
             <div className="col-md-6 mb-4" key={libro._id}>
               <BookCard
+                libroId={libro._id}
                 imagen={libro.imagen}
                 name={libro.name}
                 autor={libro.autor.name}

@@ -57,6 +57,16 @@ const getLibros = async (req, res) => {
     console.error(error);
   }
 };
+const getUltimosLibros = async(req, res) =>{
+  try {
+    // Obtener los 3 libros más recientes, ordenados por fecha de creación
+    const libros = await librosModel.find().sort({ created: -1 }).limit(3); // 
+    res.status(200).json({ data: libros });
+  } catch (error) {
+    console.error("Error al obtener los libros:", error);
+    res.status(500).json({ msg: "Error al obtener los libros", error });
+  }
+}
 
 const updateLibros = async (req, res) => {
   const { id } = req.params;
@@ -89,6 +99,7 @@ export {
   createLibro,
   getLibrosById,
   getLibros,
+  getUltimosLibros,
   updateLibros,
-  deleteLibrosById,
+  deleteLibrosById
 };
